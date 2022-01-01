@@ -1,0 +1,51 @@
+name: Project automations
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+      - closed
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - review_requested
+      - closed
+
+# map fields with customized labels
+env:
+  user: leonsteinhaeuser
+  project: 9
+  todo: Todo
+  done: Done
+  in_progress: In Progress
+
+jobs:
+  issue_opened:
+    name: issue_opened
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - name: Move issue to ${{ env.todo }}
+        uses: leonsteinhaeuser/project-beta-automations@v1.0.3
+        with:
+          gh_token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
+          user: ${{ env.user }}
+          project_id: ${{ env.project }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.todo }}
+
+  pr_opened:
+    name: pr_opened
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Move PR to ${{ env.in_progress }}
+        uses: leonsteinhaeuser/project-beta-automations@v1.0.3
+        with:
+          gh_token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
+          user: ${{ env.user }}
+          project_id: ${{ env.project }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          status_value: ${{ env.in_progress }}
+      
