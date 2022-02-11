@@ -28,16 +28,6 @@ body:
     validations:
       required: false
   - type: dropdown
-    id: driver
-    attributes:
-      label: What driver are you using to see the problem?
-      multiple: false
-      options:
-        - local-storage
-        - s3
-    validations:
-      required: true
-  - type: dropdown
     id: version
     attributes:
       label: Version
